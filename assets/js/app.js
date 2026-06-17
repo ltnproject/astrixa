@@ -58,7 +58,7 @@ const App = {
 
     // Settings & Vault
     document.getElementById('open-settings-btn').addEventListener('click', Settings.open);
-    document.getElementById('open-vault-btn').addEventListener('click', Settings.open); // Both open settings for now
+    document.getElementById('open-vault-btn').addEventListener('click', Settings.openVault);
 
     // Theme
     document.getElementById('theme-toggle-app').addEventListener('click', () => {
@@ -162,9 +162,11 @@ const App = {
 
   updateLastMessage: (content) => {
     const container = document.getElementById('messages-container');
-    const lastMsg = container.querySelector('.message-row.assistant:last-child .message-bubble');
-    if (lastMsg) {
-      lastMsg.innerHTML = UI.renderMarkdown(content);
+    const lastRow = container.querySelector('.message-row.assistant:last-child');
+    if (lastRow) {
+      const bubble = lastRow.querySelector('.message-bubble');
+      lastRow.classList.remove('is-typing');
+      bubble.innerHTML = UI.renderMarkdown(content);
       App.scrollToBottom();
     }
   },
@@ -249,10 +251,15 @@ const App = {
     
     overlay.style.display = 'flex';
     
-    // Populate providers
-    providerList.innerHTML = Object.values(window.PROVIDERS).slice(0, 5).map(p => `
-      <button class="btn btn-secondary justify-start gap-3" onclick="App.selectOnboardingProvider('${p.id}')">
-        <span style="width:24px">${p.icon}</span> ${p.name}
+    // Populate providers (ALL providers now)
+    providerList.style.maxHeight = '300px';
+    providerList.style.overflowY = 'auto';
+    providerList.style.paddingRight = '8px';
+    
+    providerList.innerHTML = Object.values(window.PROVIDERS).map(p => `
+      <button class="btn btn-secondary justify-start gap-3 w-full mb-2" onclick="App.selectOnboardingProvider('${p.id}')">
+        <span style="width:24px; height:24px; display:flex; align-items:center;">${p.icon}</span> 
+        <span class="font-bold">${p.name}</span>
       </button>
     `).join('');
 
@@ -279,7 +286,7 @@ const App = {
 
   showOnboardingStep: (step) => {
     document.querySelectorAll('.onboarding-step').forEach((el, i) => {
-      el.classList.toggle('active', i + 1 === step);
+      el.style.display = (i + 1 === step) ? 'block' : 'none';
     });
   },
 

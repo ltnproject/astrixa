@@ -131,6 +131,35 @@ const Chat = {
     aiMsg.model = modelId;
 
     try {
+      const username = Storage.get(STORAGE_KEYS.USER, 'User');
+      const addons = Storage.getAddons();
+      let searchContext = '';
+
+      // Check for search intent and SerpAPI key
+      if (addons.serpapi && (text.toLowerCase().includes('search') || text.toLowerCase().includes('who is') || text.toLowerCase().includes('current'))) {
+        try {
+          App.updateLastMessage('🔍 Searching the web...');
+          const searchRes = await fetch(`https://serpapi.com/search.json?q=${encodeURIComponent(text)}&api_key=${addons.serpapi}`);
+          const searchData = await searchRes.json();
+          if (searchData.organic_results) {
+            searchContext = `\n\nWEB SEARCH RESULTS:\n${searchData.organic_results.slice(0, 3).map(r => `- ${r.title}: ${r.snippet}`).join('\n')}`;
+          }
+        } catch (e) {
+          console.error('Search Error:', e);
+        }
+      }
+
+      // Prepare message payload with system prompt
+      const systemMessage = {
+        role: 'system',
+        content: `${settings.systemPrompt}\n\nThe user's name is ${username}. Address them as ${username} when appropriate.${searchContext}`
+      };
+
+      const payloadMessages = [
+        systemMessage,
+        ...messages.slice(0, -1).map(m => ({ role: m.role, content: m.content }))
+      ];
+
       const response = await fetch(`${provider.baseUrl}/chat/completions`, {
         method: 'POST',
         headers: {
@@ -139,7 +168,7 @@ const Chat = {
         },
         body: JSON.stringify({
           model: currentChat.model || settings.defaultModel,
-          messages: messages.slice(0, -1).map(m => ({ role: m.role, content: m.content })),
+          messages: payloadMessages,
           temperature: settings.temperature,
           max_tokens: settings.maxTokens,
           stream: true
@@ -154,27 +183,32 @@ const Chat = {
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
+      let buffer = '';
       
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
         
-        const chunk = decoder.decode(value);
-        const lines = chunk.split('\n');
-        
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop(); // Keep the incomplete line in buffer
+
         for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const dataStr = line.slice(6);
-            if (dataStr === '[DONE]') break;
-            
-            try {
-              const data = JSON.parse(dataStr);
-              const content = data.choices[0]?.delta?.content || '';
+          const trimmed = line.trim();
+          if (!trimmed || !trimmed.startsWith('data: ')) continue;
+          
+          const dataStr = trimmed.slice(6);
+          if (dataStr === '[DONE]') break;
+          
+          try {
+            const data = JSON.parse(dataStr);
+            const content = data.choices[0]?.delta?.content || '';
+            if (content) {
               aiMsg.content += content;
               App.updateLastMessage(aiMsg.content);
-            } catch (e) {
-              // Ignore parse errors for incomplete chunks
             }
+          } catch (e) {
+            console.error('Stream parse error', e);
           }
         }
       }
