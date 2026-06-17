@@ -131,28 +131,11 @@ const Chat = {
     aiMsg.model = modelId;
 
     try {
-      const username = Storage.get(STORAGE_KEYS.USER, 'User');
-      const addons = Storage.getAddons();
-      let searchContext = '';
-
-      // Check for search intent and SerpAPI key
-      if (addons.serpapi && (text.toLowerCase().includes('search') || text.toLowerCase().includes('who is') || text.toLowerCase().includes('current'))) {
-        try {
-          App.updateLastMessage('🔍 Searching the web...');
-          const searchRes = await fetch(`https://serpapi.com/search.json?q=${encodeURIComponent(text)}&api_key=${addons.serpapi}`);
-          const searchData = await searchRes.json();
-          if (searchData.organic_results) {
-            searchContext = `\n\nWEB SEARCH RESULTS:\n${searchData.organic_results.slice(0, 3).map(r => `- ${r.title}: ${r.snippet}`).join('\n')}`;
-          }
-        } catch (e) {
-          console.error('Search Error:', e);
-        }
-      }
-
       // Prepare message payload with system prompt
+      const username = Storage.get(STORAGE_KEYS.USER, 'User');
       const systemMessage = {
         role: 'system',
-        content: `${settings.systemPrompt}\n\nThe user's name is ${username}. Address them as ${username} when appropriate.${searchContext}`
+        content: `${settings.systemPrompt}\n\nThe user's name is ${username}. Address them as ${username} when appropriate.`
       };
 
       const payloadMessages = [

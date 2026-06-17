@@ -10,8 +10,7 @@ const STORAGE_KEYS = {
   API_KEYS: 'astrixa_api_keys',
   THEME: 'astrixa_theme',
   USER: 'astrixa_user',
-  FOLDERS: 'astrixa_folders',
-  ADDONS: 'astrixa_addons'
+  FOLDERS: 'astrixa_folders'
 };
 
 const Storage = {
@@ -65,14 +64,6 @@ const Storage = {
     const keys = Storage.getApiKeys();
     keys[providerId] = key;
     Storage.save(STORAGE_KEYS.API_KEYS, keys);
-  },
-
-  // Helper for Addons
-  getAddons: () => Storage.get(STORAGE_KEYS.ADDONS, {}),
-  saveAddonKey: (addonId, key) => {
-    const addons = Storage.getAddons();
-    addons[addonId] = key;
-    Storage.save(STORAGE_KEYS.ADDONS, addons);
   },
 
   // Helper for Settings
