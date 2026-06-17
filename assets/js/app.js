@@ -254,6 +254,13 @@ const App = {
     
     document.getElementById('onboarding-finish').onclick = () => {
       const username = document.getElementById('onboarding-username').value || 'User';
+      const apiKey = document.getElementById('onboarding-api-key').value;
+      const settings = Storage.getSettings();
+      
+      if (apiKey) {
+        Storage.saveApiKey(settings.defaultProvider, apiKey);
+      }
+      
       Storage.save(STORAGE_KEYS.USER, username);
       overlay.style.display = 'none';
       App.loadAppData();

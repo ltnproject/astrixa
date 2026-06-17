@@ -113,6 +113,7 @@ const Chat = {
     const currentChat = chats.find(c => c.id === Chat.currentChatId);
     
     const providerId = currentChat.provider || settings.defaultProvider;
+    const modelId = currentChat.model || settings.defaultModel;
     const provider = window.PROVIDERS[providerId];
     const apiKey = apiKeys[providerId];
 
@@ -121,6 +122,10 @@ const Chat = {
       Chat.finishGeneration(messages);
       return;
     }
+
+    // Set model in message for display
+    aiMsg.provider = providerId;
+    aiMsg.model = modelId;
 
     try {
       const response = await fetch(`${provider.baseUrl}/chat/completions`, {

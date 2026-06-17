@@ -4,7 +4,7 @@
 
 Astrixa is a production-quality, privacy-first AI platform designed for power users who want full control over their AI experience. Built with a modern glassmorphism UI and a modular architecture, Astrixa allows you to connect to 16+ AI providers using your own API keys.
 
-**Live Demo:** [drk.qzz.io/astrixa](https://drk.qzz.io/astrixa )
+**Live Demo:** [drk.qzz.io/astrixa](https://drk.qzz.io/astrixa)
 
 ---
 
@@ -49,6 +49,7 @@ Advanced model management.
 Since Astrixa is built with vanilla HTML/CSS/JS, you don't need to install any dependencies.
 1.  Clone the repo: `git clone https://github.com/yourusername/astrixa.git`
 2.  Open `index.html` in your browser.
+3.  (Optional) Use a local server like `Live Server` in VS Code for a better experience.
 
 ---
 
@@ -69,6 +70,33 @@ Since Astrixa is built with vanilla HTML/CSS/JS, you don't need to install any d
         ├── storage.js  # Astrixa Vault Management
         ├── ui.js       # Shared UI Components
         └── theme.js    # Theme Management System
+```
+
+---
+
+## 🎨 Customization
+
+### Adding a New Provider
+Open `assets/js/providers.js` and add a new entry to the `PROVIDERS` object:
+
+```javascript
+my_provider: {
+  id: 'my_provider',
+  name: 'New AI',
+  baseUrl: 'https://api.newai.com/v1',
+  icon: '✨',
+  color: '#ff0000',
+  models: [
+    { id: 'model-1', name: 'Model 1', context: 32000, tags: ['Fast'] }
+  ]
+}
+```
+
+---
+
 ## 📜 License
-Built with ❤️ for the AI community. This project is free to use.
-Developed by AstrixaWorld 🌌
+Built with ❤️ for the AI community. This project is open-source and free to use.
+
+---
+
+**Developed by AstrixaWorld** 🌌
