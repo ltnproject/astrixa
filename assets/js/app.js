@@ -264,8 +264,9 @@ const App = {
     `).join('');
 
     document.getElementById('onboarding-start').onclick = () => App.showOnboardingStep(2);
-    document.getElementById('onboarding-back-2').onclick = () => App.showOnboardingStep(2);
+    document.getElementById('onboarding-back-2').onclick = () => App.showOnboardingStep(1);
     document.getElementById('onboarding-next-3').onclick = () => App.showOnboardingStep(4);
+    document.getElementById('onboarding-back-3').onclick = () => App.showOnboardingStep(2);
     
     document.getElementById('onboarding-finish').onclick = () => {
       const username = document.getElementById('onboarding-username').value || 'User';

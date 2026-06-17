@@ -10,158 +10,172 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
-<body>
-  <!-- Sidebar -->
-  <aside class="app-sidebar">
-    <div class="logo-container">
-      <div class="logo-icon">A</div>
-      <span>Astrixa</span>
-    </div>
-
-    <nav class="nav-group">
-      <div class="nav-label">Main</div>
-      <div class="nav-item active" id="nav-home"><span>🏠</span> Home</div>
-      <div class="nav-item" id="nav-chat"><span>💬</span> Chat</div>
-      <div class="nav-item"><span>🖼️</span> Images</div>
-      <div class="nav-item"><span>💻</span> Code</div>
-      <div class="nav-item"><span>📄</span> Documents</div>
-    </nav>
-
-    <nav class="nav-group">
-      <div class="nav-label">Workspaces</div>
-      <div class="nav-item"><span style="color:#f472b6;">●</span> Personal</div>
-      <div class="nav-item"><span style="color:#60a5fa;">●</span> Work</div>
-      <div class="nav-item"><span style="color:#34d399;">●</span> Research</div>
-    </nav>
-
-    <div class="unlimited-power-card">
-      <div class="text-xs font-bold mb-2">💎 UNLIMITED POWER</div>
-      <p class="text-[10px] text-secondary mb-3">One platform. Every model. Total freedom.</p>
-      <button class="btn-premium w-full text-center justify-center" id="open-vault-btn">Astrixa Vault</button>
-    </div>
-
-    <div class="flex items-center gap-3 mt-8 pt-6 border-t border-white/5">
-      <div class="w-10 h-10 rounded-full bg-brand-gradient flex items-center justify-center font-bold" id="user-avatar-main">U</div>
-      <div class="flex-1 overflow-hidden">
-        <div class="text-sm font-bold truncate" id="username-display">User</div>
-        <div class="text-[10px] text-secondary">Pro Plan</div>
-      </div>
-      <button class="btn-icon" id="open-settings-btn">⚙️</button>
-    </div>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="app-main">
-    <header class="app-header">
-      <div class="search-bar-container">
-        <span>🔍</span>
-        <input type="text" placeholder="Search anything... (⌘K)" />
+<body data-theme="dark">
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="app-sidebar" id="app-sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">A</div>
+          <span>Astrixa</span>
+        </div>
+        <button class="btn-icon lg:hidden" id="mobile-sidebar-close">✕</button>
       </div>
 
-      <div class="header-actions">
-        <button class="btn-icon">🔔</button>
-        <button class="btn-premium" onclick="window.open('get-api.html')">API Keys ↗</button>
-      </div>
-    </header>
+      <div class="sidebar-scroll">
+        <button class="btn btn-primary w-full mb-4 gap-2" id="new-chat-btn">
+          <span>+</span> New Chat
+        </button>
 
-    <div class="dashboard-grid">
-      <!-- Column 1: Providers -->
-      <div class="dashboard-column">
-        <div class="glass-panel h-full">
-          <div class="panel-header">
-            <span>Providers</span>
-            <button class="btn-icon text-xs" onclick="window.open('get-api.html')">+ Add</button>
-          </div>
-          <div class="panel-content" id="provider-list-container">
-            <!-- Populated by JS -->
-          </div>
+        <div class="nav-label">Conversations</div>
+        <div id="chat-list" class="flex flex-col gap-1">
+          <!-- Chat list items will be injected here -->
         </div>
       </div>
 
-      <!-- Column 2: Chat Central -->
-      <div class="dashboard-column">
-        <div class="chat-central h-full">
-          <div class="panel-header">
-            <div class="flex items-center gap-2">
-              <span id="current-provider-icon">✨</span>
-              <span id="current-model-name">Select Model</span>
-            </div>
-            <div class="text-xs text-secondary">Temperature: 0.7</div>
+      <div class="sidebar-footer">
+        <div class="flex flex-col gap-1">
+          <div class="sidebar-item" id="open-vault-btn">
+            <span>🔒</span> Astrixa Vault
           </div>
-
-          <div class="chat-messages" id="messages-container">
-            <!-- Messages will appear here -->
-            <div class="flex flex-col items-center justify-center h-full text-center opacity-20">
-              <div class="text-6xl mb-4">A</div>
-              <h2 class="text-xl font-bold">Welcome back, <span class="user-name-span">Alex</span> 👋</h2>
-              <p class="text-sm">What will you build today?</p>
-            </div>
+          <div class="sidebar-item" id="open-settings-btn">
+            <span>⚙️</span> Settings
           </div>
+          <div class="sidebar-item" id="theme-toggle-app">
+            <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
+          </div>
+        </div>
+        
+        <div class="mt-4 pt-4 border-t border-white/5 flex items-center gap-3 px-2">
+          <div class="w-8 h-8 rounded-full bg-brand-gradient flex items-center justify-center font-bold text-xs" id="user-avatar">U</div>
+          <div class="flex-1 overflow-hidden">
+            <div class="text-xs font-bold truncate" id="username-sidebar">User</div>
+            <div class="text-[10px] opacity-40">Pro Account</div>
+          </div>
+        </div>
+      </div>
+    </aside>
 
-          <div class="chat-input-wrapper">
-            <div class="input-field-premium">
-              <button class="btn-icon">📎</button>
-              <textarea id="chat-input" placeholder="Message Astrixa..." rows="1"></textarea>
-              <button class="btn-icon" id="send-btn">🚀</button>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="fixed inset-0 bg-black/50 z-20 hidden" id="sidebar-overlay"></div>
+
+    <!-- Main Content -->
+    <main class="app-content">
+      <!-- Chat Header -->
+      <header class="chat-header">
+        <div class="flex items-center gap-3">
+          <button class="btn-icon lg:hidden" id="mobile-sidebar-toggle">☰</button>
+          <div class="flex flex-col">
+            <h1 class="text-sm font-bold" id="current-chat-title">New Chat</h1>
+            <div class="text-[10px] opacity-50 flex items-center gap-1">
+              <span id="header-provider-icon">✨</span>
+              <span id="header-model-name">Astra Assistant</span>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Column 3: Models & Stats -->
-      <div class="dashboard-column">
-        <div class="glass-panel" style="height: 180px;">
-          <div class="panel-content grid grid-cols-2 gap-4 text-center p-6">
-            <div><div class="text-xl font-bold">16+</div><div class="text-[10px] text-secondary">Providers</div></div>
-            <div><div class="text-xl font-bold">50+</div><div class="text-[10px] text-secondary">Models</div></div>
-            <div><div class="text-xl font-bold">∞</div><div class="text-[10px] text-secondary">Possibilities</div></div>
-            <div><div class="text-xl font-bold">100%</div><div class="text-[10px] text-secondary">Yours</div></div>
+        <div class="flex items-center gap-2">
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 glass rounded-lg border border-white/5 cursor-pointer" id="model-selector-btn">
+            <span id="active-provider-icon">✨</span>
+            <span class="text-xs font-bold" id="active-model-name">Select Model</span>
+            <span class="text-[10px] opacity-40">▼</span>
+          </div>
+          <button class="btn-icon" id="share-chat-btn">📤</button>
+        </div>
+      </header>
+
+      <!-- Chat Container -->
+      <div class="chat-container" id="chat-container">
+        <div class="chat-inner" id="messages-container">
+          <!-- Messages will be injected here -->
+          <div class="flex flex-col items-center justify-center h-full py-20 text-center animate-fadeIn">
+            <div class="w-16 h-16 bg-brand-gradient rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-brand">A</div>
+            <h2 class="text-2xl font-black mb-2">How can I help you today?</h2>
+            <p class="text-sm text-secondary max-w-md">Astrixa connects you to the world's most powerful AI models in one private, secure interface.</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-10 w-full max-w-xl">
+              <button class="btn btn-secondary text-left justify-start p-4 h-auto" onclick="App.quickAction('Explain quantum computing in simple terms')">
+                <div class="flex flex-col">
+                  <span class="text-xs font-bold">Explain concept</span>
+                  <span class="text-[10px] opacity-50">Quantum computing...</span>
+                </div>
+              </button>
+              <button class="btn btn-secondary text-left justify-start p-4 h-auto" onclick="App.quickAction('Write a Python script to scrape a website')">
+                <div class="flex flex-col">
+                  <span class="text-xs font-bold">Code something</span>
+                  <span class="text-[10px] opacity-50">Python web scraper...</span>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div class="glass-panel flex-1">
-          <div class="panel-header">Models</div>
-          <div class="panel-content" id="model-list-container">
-            <!-- Populated by JS -->
+      <!-- Chat Input Area -->
+      <div class="chat-input-area">
+        <div class="chat-input-inner">
+          <div class="input-container">
+            <textarea id="chat-input" class="chat-textarea" placeholder="Message Astra..." rows="1"></textarea>
+            <div class="flex items-center justify-between mt-2 pt-2 border-t border-white/5">
+              <div class="flex items-center gap-1">
+                <button class="btn-icon btn-sm" title="Upload File">📎</button>
+                <button class="btn-icon btn-sm" title="Voice Input">🎤</button>
+                <button class="btn-icon btn-sm" title="Web Search">🌐</button>
+              </div>
+              <button class="btn btn-primary btn-sm px-4" id="send-btn">
+                <span>Send</span>
+              </button>
+            </div>
           </div>
+          <p class="text-[10px] text-center mt-3 opacity-30">
+            Astra can make mistakes. Check important info. All data is stored locally in your Astrixa Vault.
+          </p>
         </div>
       </div>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <!-- Onboarding Overlay -->
   <div id="onboarding-overlay" class="modal-overlay" style="display:none;">
-    <div class="modal-content">
-      <div id="step-1" class="onboarding-step active">
-        <div class="logo-icon mx-auto mb-6" style="width:64px; height:64px; font-size:2rem;">A</div>
-        <h2 class="text-2xl font-bold text-center mb-2">Welcome to Astrixa</h2>
-        <p class="text-secondary text-center mb-8">The ultimate AI experience. Let's get you set up.</p>
-        <button class="btn-premium w-full py-4 justify-center" id="onboarding-start">Get Started →</button>
+    <div class="modal-container max-w-md p-8 text-center">
+      <div id="onboarding-step-1" class="onboarding-step">
+        <div class="w-16 h-16 bg-brand-gradient rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6 shadow-brand">A</div>
+        <h2 class="text-2xl font-black mb-2">Welcome to Astrixa</h2>
+        <p class="text-sm text-secondary mb-8">The ultimate AI platform. One interface, every model, total privacy.</p>
+        <button class="btn btn-primary w-full py-3" id="onboarding-start">Get Started →</button>
       </div>
 
-      <div id="step-2" class="onboarding-step" style="display:none;">
-        <h2 class="text-xl font-bold mb-2">Pick Your First Provider</h2>
-        <p class="text-secondary text-xs mb-6">You can add more later in settings.</p>
-        <div id="onboarding-provider-list" class="flex flex-col gap-2"></div>
+      <div id="onboarding-step-2" class="onboarding-step" style="display:none;">
+        <h2 class="text-xl font-bold mb-2">Choose a Provider</h2>
+        <p class="text-xs text-secondary mb-6">Pick a provider to start with. You can add more later.</p>
+        <div id="onboarding-provider-list" class="flex flex-col gap-2 mb-6 max-h-60 overflow-y-auto">
+          <!-- Providers will be injected here -->
+        </div>
+        <button class="btn btn-ghost w-full" id="onboarding-back-2">Back</button>
       </div>
 
-      <div id="step-3" class="onboarding-step" style="display:none;">
-        <h2 class="text-xl font-bold mb-2">Enter API Key</h2>
-        <p class="text-secondary text-xs mb-6">Your key is stored locally and never leaves your browser.</p>
-        <input type="password" id="onboarding-api-key" class="input-field-premium w-full mb-4" placeholder="Paste key here..." style="background:var(--bg-primary); border:1px solid var(--border-color); padding:16px;">
-        <button class="btn-premium w-full py-4 justify-center" id="onboarding-next-3">Continue</button>
+      <div id="onboarding-step-3" class="onboarding-step" style="display:none;">
+        <h2 class="text-xl font-bold mb-2">Connect API Key</h2>
+        <p class="text-xs text-secondary mb-6">Your key is stored locally in your browser and never leaves your device.</p>
+        <input type="password" id="onboarding-api-key" class="input-field mb-4" placeholder="Paste your API key here...">
+        <div class="flex gap-2">
+          <button class="btn btn-ghost flex-1" id="onboarding-back-3">Back</button>
+          <button class="btn btn-primary flex-1" id="onboarding-next-3">Continue</button>
+        </div>
+        <a href="get-api.html" target="_blank" class="text-[10px] text-brand font-bold mt-4 inline-block">Where do I get a key?</a>
       </div>
 
-      <div id="step-4" class="onboarding-step" style="display:none;">
-        <h2 class="text-xl font-bold mb-2">Almost Ready</h2>
-        <p class="text-secondary text-xs mb-6">What should we call you?</p>
-        <input type="text" id="onboarding-username" class="input-field-premium w-full mb-8" placeholder="Your name..." style="background:var(--bg-primary); border:1px solid var(--border-color); padding:16px;">
-        <button class="btn-premium w-full py-4 justify-center" id="onboarding-finish">Launch Astrixa</button>
+      <div id="onboarding-step-4" class="onboarding-step" style="display:none;">
+        <h2 class="text-xl font-bold mb-2">Personalize Astra</h2>
+        <p class="text-xs text-secondary mb-6">What should we call you?</p>
+        <input type="text" id="onboarding-username" class="input-field mb-8" placeholder="Enter your name...">
+        <button class="btn btn-primary w-full py-3" id="onboarding-finish">Launch Astrixa</button>
       </div>
     </div>
   </div>
 
-  <div id="toast-container"></div>
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-[500] flex flex-col gap-2"></div>
 
   <!-- Scripts -->
   <script src="assets/js/providers.js"></script>
@@ -171,54 +185,5 @@
   <script src="assets/js/chat.js"></script>
   <script src="assets/js/settings.js"></script>
   <script src="assets/js/app.js"></script>
-  
-  <script>
-    // Overriding some app logic for the new layout
-    const originalRenderChatList = App.renderChatList;
-    App.renderChatList = () => {
-      const container = document.getElementById('provider-list-container');
-      const providers = Object.values(window.PROVIDERS);
-      const apiKeys = Storage.getApiKeys();
-      
-      container.innerHTML = providers.map(p => `
-        <div class="provider-item ${apiKeys[p.id] ? 'active' : ''}" onclick="App.changeModel('${p.id}', '${p.models[0].id}')">
-          <div class="provider-icon" style="background:${p.color}22; border:1px solid ${p.color}44;">
-            <div style="color:${p.color}">${p.icon}</div>
-          </div>
-          <div class="flex-1">
-            <div class="text-sm font-bold">${p.name}</div>
-            <div class="text-[10px] text-secondary">${p.models[0].name}</div>
-          </div>
-          <div class="w-2 h-2 rounded-full" style="background:${apiKeys[p.id] ? '#34d399' : '#475569'}"></div>
-        </div>
-      `).join('');
-
-      // Also update models column
-      const modelContainer = document.getElementById('model-list-container');
-      const settings = Storage.getSettings();
-      const currentProvider = window.PROVIDERS[settings.defaultProvider] || providers[0];
-      
-      modelContainer.innerHTML = currentProvider.models.map(m => `
-        <div class="provider-item" onclick="App.changeModel('${currentProvider.id}', '${m.id}')">
-          <div class="provider-icon" style="background:${currentProvider.color}22;">
-            <div style="color:${currentProvider.color}">${currentProvider.icon}</div>
-          </div>
-          <div class="flex-1">
-            <div class="text-sm font-bold">${m.name}</div>
-            <div class="text-[10px] text-secondary">by ${currentProvider.name}</div>
-          </div>
-          <div class="text-xs opacity-20">☆</div>
-        </div>
-      `).join('');
-    };
-
-    // Update username in welcome screen
-    const originalUpdateUserInfo = App.updateUserInfo;
-    App.updateUserInfo = () => {
-      originalUpdateUserInfo();
-      const name = Storage.get(STORAGE_KEYS.USER, 'User');
-      document.querySelectorAll('.user-name-span').forEach(el => el.textContent = name);
-    };
-  </script>
 </body>
 </html>
