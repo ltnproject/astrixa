@@ -965,8 +965,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
   position: relative;
   user-select: none;
 }
-.sidebar-item span:first-child { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; }
-.sidebar-item svg { width: 18px; height: 18px; }
 .sidebar-item:hover {
   background: var(--bg-glass);
   color: var(--text-primary);
@@ -975,23 +973,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
   background: var(--brand-gradient-soft);
   color: var(--text-brand);
   border: 1px solid var(--border-brand);
-}
-
-/* Custom Scrollbar Override */
-.sidebar-scroll::-webkit-scrollbar,
-.chat-container::-webkit-scrollbar,
-.modal-body::-webkit-scrollbar,
-#settings-keys-list::-webkit-scrollbar,
-#onboarding-provider-list::-webkit-scrollbar {
-  width: 4px;
-}
-.sidebar-scroll::-webkit-scrollbar-thumb,
-.chat-container::-webkit-scrollbar-thumb,
-.modal-body::-webkit-scrollbar-thumb,
-#settings-keys-list::-webkit-scrollbar-thumb,
-#onboarding-provider-list::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
-  border-radius: 10px;
 }
 .sidebar-item .item-actions {
   margin-left: auto;

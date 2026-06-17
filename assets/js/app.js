@@ -58,7 +58,7 @@ const App = {
 
     // Settings & Vault
     document.getElementById('open-settings-btn').addEventListener('click', Settings.open);
-    document.getElementById('open-vault-btn').addEventListener('click', Settings.openVault);
+    document.getElementById('open-vault-btn').addEventListener('click', Settings.open); // Both open settings for now
 
     // Theme
     document.getElementById('theme-toggle-app').addEventListener('click', () => {
@@ -251,15 +251,10 @@ const App = {
     
     overlay.style.display = 'flex';
     
-    // Populate providers (ALL providers now)
-    providerList.style.maxHeight = '300px';
-    providerList.style.overflowY = 'auto';
-    providerList.style.paddingRight = '8px';
-    
-    providerList.innerHTML = Object.values(window.PROVIDERS).map(p => `
-      <button class="btn btn-secondary justify-start gap-3 w-full mb-2" onclick="App.selectOnboardingProvider('${p.id}')">
-        <span style="width:24px; height:24px; display:flex; align-items:center;">${p.icon}</span> 
-        <span class="font-bold">${p.name}</span>
+    // Populate providers
+    providerList.innerHTML = Object.values(window.PROVIDERS).slice(0, 5).map(p => `
+      <button class="btn btn-secondary justify-start gap-3" onclick="App.selectOnboardingProvider('${p.id}')">
+        <span style="width:24px">${p.icon}</span> ${p.name}
       </button>
     `).join('');
 

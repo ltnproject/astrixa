@@ -23,13 +23,16 @@ const Settings = {
         <!-- API Keys Section -->
         <section>
           <h3 class="text-sm font-bold uppercase tracking-wider opacity-50 mb-3">Astrixa Connect (API Keys)</h3>
-          <div class="flex flex-col gap-3 max-h-80 overflow-y-auto pr-2" id="settings-keys-list">
+          <div class="flex flex-col gap-3 max-h-60 overflow-y-auto pr-2" id="settings-keys-list">
             ${Object.values(window.PROVIDERS).map(p => `
-              <div class="flex items-center gap-3 p-3 glass rounded-lg border border-transparent hover:border-brand-primary/30 transition-all">
-                <div class="w-8 h-8 rounded flex items-center justify-center p-1.5" style="background:${p.color};color:white">${p.icon}</div>
+              <div class="flex items-center gap-3 p-3 glass rounded-lg">
+                <div class="w-8 h-8 rounded flex items-center justify-center font-bold text-xs" style="background:${p.color};color:white">${p.icon}</div>
                 <div class="flex-1">
                   <div class="text-xs font-bold">${p.name}</div>
-                  <div class="text-[10px] opacity-40 font-mono">${apiKeys[p.id] ? 'Key Active' : 'No Key Set'}</div>
+                  <input type="password" class="bg-transparent border-none text-xs w-full focus:ring-0 p-0 opacity-60" 
+                    placeholder="Not set" 
+                    data-provider="${p.id}" 
+                    value="${apiKeys[p.id] ? '••••••••••••••••' : ''}">
                 </div>
                 <button class="btn-icon text-xs" onclick="Settings.editKey('${p.id}')">✏️</button>
               </div>
@@ -53,6 +56,16 @@ const Settings = {
               <label class="text-xs font-semibold">System Prompt</label>
               <textarea id="settings-system" class="input-field text-xs" rows="3">${settings.systemPrompt}</textarea>
             </div>
+          </div>
+        </section>
+
+        <!-- Vault Section -->
+        <section>
+          <h3 class="text-sm font-bold uppercase tracking-wider opacity-50 mb-3">Astrixa Vault</h3>
+          <div class="flex gap-2">
+            <button class="btn btn-secondary text-xs flex-1" onclick="Settings.exportVault()">Export Data</button>
+            <button class="btn btn-secondary text-xs flex-1" onclick="Settings.importVault()">Import Data</button>
+            <button class="btn btn-secondary text-xs flex-1 text-red-500" onclick="Settings.clearVault()">Reset All</button>
           </div>
         </section>
       </div>
@@ -142,43 +155,6 @@ const Settings = {
       reader.readAsText(file);
     };
     input.click();
-  },
-
-  openVault: () => {
-    const body = `
-      <div class="flex flex-col gap-6">
-        <div class="p-4 bg-brand-primary/10 border border-brand-primary/20 rounded-xl">
-          <div class="text-sm font-bold mb-1">Your Data is Local</div>
-          <p class="text-xs text-secondary">Astrixa stores everything in your browser's LocalStorage. We never see your keys or chats.</p>
-        </div>
-
-        <section>
-          <h3 class="text-sm font-bold uppercase tracking-wider opacity-50 mb-3">Backup & Recovery</h3>
-          <div class="flex flex-col gap-2">
-            <button class="btn btn-secondary justify-start gap-3" onclick="Settings.exportVault()">
-              <span>📤</span> Export Astrixa Vault (.json)
-            </button>
-            <button class="btn btn-secondary justify-start gap-3" onclick="Settings.importVault()">
-              <span>📥</span> Import Astrixa Vault (.json)
-            </button>
-          </div>
-        </section>
-
-        <section>
-          <h3 class="text-sm font-bold uppercase tracking-wider opacity-50 mb-3">Danger Zone</h3>
-          <div class="p-4 border border-red-500/20 bg-red-500/5 rounded-xl">
-            <p class="text-xs text-secondary mb-3">This will permanently delete all your data, including API keys and chat history.</p>
-            <button class="btn btn-primary bg-red-600 hover:bg-red-700 border-none w-full text-xs" onclick="Settings.clearVault()">
-              Purge All Local Data
-            </button>
-          </div>
-        </section>
-      </div>
-    `;
-
-    const footer = `<button class="btn btn-ghost" id="vault-close">Close Vault</button>`;
-    const modal = UI.modal({ title: 'Astrixa Vault', body, footer });
-    document.getElementById('vault-close').addEventListener('click', () => modal.close());
   },
 
   clearVault: () => {
