@@ -129,25 +129,33 @@ const App = {
     }
 
     emptyState.style.display = 'none';
-    container.innerHTML = messages.map((m, i) => `
-      <div class="message-row ${m.role}">
-        <div class="message-avatar ${m.role === 'assistant' ? 'ai' : ''}">
-          ${m.role === 'assistant' ? 'A' : (Storage.get(STORAGE_KEYS.USER, 'U')[0].toUpperCase())}
-        </div>
-        <div class="message-content">
-          <div class="message-bubble ${m.role}">
-            ${UI.renderMarkdown(m.content)}
+    container.innerHTML = messages.map((m, i) => {
+      const isLast = i === messages.length - 1;
+      const isAssistant = m.role === 'assistant';
+      const content = (isAssistant && isLast && !m.content) 
+        ? '<div class="typing-indicator"><span></span><span></span><span></span></div>' 
+        : UI.renderMarkdown(m.content);
+
+      return `
+        <div class="message-row ${m.role} ${isAssistant && isLast && !m.content ? 'is-typing' : ''}">
+          <div class="message-avatar ${isAssistant ? 'ai' : ''}">
+            ${isAssistant ? 'A' : (Storage.get(STORAGE_KEYS.USER, 'U')[0].toUpperCase())}
           </div>
-          <div class="message-meta">
-            <span>${new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-            <div class="message-actions">
-              <button class="message-action-btn" onclick="App.copyMessage(this)" data-tooltip="Copy">📋</button>
-              ${m.role === 'assistant' ? `<button class="message-action-btn" onclick="App.regenerateMessage(${i})" data-tooltip="Regenerate">🔄</button>` : ''}
+          <div class="message-content">
+            <div class="message-bubble ${m.role}">
+              ${content}
+            </div>
+            <div class="message-meta">
+              <span>${new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+              <div class="message-actions">
+                <button class="message-action-btn" onclick="App.copyMessage(this)" data-tooltip="Copy">📋</button>
+                ${isAssistant ? `<button class="message-action-btn" onclick="App.regenerateMessage(${i})" data-tooltip="Regenerate">🔄</button>` : ''}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
     
     App.scrollToBottom();
   },

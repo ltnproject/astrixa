@@ -102,10 +102,13 @@ const Chat = {
       role: 'assistant',
       content: '',
       timestamp: new Date().toISOString(),
-      provider: '', // To be filled
-      model: ''     // To be filled
+      provider: '',
+      model: ''
     };
     messages.push(aiMsg);
+    
+    // Immediately render the placeholder for the assistant message
+    App.renderMessages(messages);
     
     const settings = Storage.getSettings();
     const apiKeys = Storage.getApiKeys();
