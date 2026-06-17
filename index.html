@@ -1,177 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Astrixa — The Ultimate AI Platform</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%238b5cf6'/><text x='16' y='22' text-anchor='middle' font-size='18' fill='white' font-family='Arial' font-weight='bold'>A</text></svg>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <meta name="description" content="One platform. Every AI model. Unlimited possibilities. Connect to OpenAI, Gemini, Claude, Groq, and 12+ more AI providers in a single beautiful interface." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%238b5cf6'/><stop offset='100%25' stop-color='%2306b6d4'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='url(%23g)'/><text x='16' y='22' text-anchor='middle' font-size='18' fill='white' font-family='Arial' font-weight='bold'>A</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
   <style>
-    body {
-      overflow-y: auto;
-      display: block;
-      background-attachment: fixed;
+    /* ── Landing Page Specific ── */
+    .landing-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 0 24px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.25s;
     }
-    .hero-section {
+    .landing-nav.scrolled {
+      background: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .hero {
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 80px 24px;
       text-align: center;
+      padding: 100px 24px;
       position: relative;
+      overflow: hidden;
     }
-    .hero-glow {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: -1;
-    }
-    .hero-badge {
-      background: rgba(139, 92, 246, 0.1);
-      border: 1px solid rgba(139, 92, 246, 0.3);
-      padding: 8px 16px;
-      border-radius: 99px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      color: #a5b4fc;
-      margin-bottom: 24px;
-      text-transform: uppercase;
-    }
+    .hero-content { max-width: 860px; z-index: 2; }
     .hero-title {
-      font-size: clamp(3rem, 8vw, 6rem);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
       font-weight: 900;
       line-height: 1.1;
       margin-bottom: 24px;
-      background: linear-gradient(135deg, #fff 0%, #a5b4fc 50%, #818cf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
     .hero-subtitle {
       font-size: 1.25rem;
       color: var(--text-secondary);
       max-width: 600px;
-      margin-bottom: 40px;
+      margin: 0 auto 40px;
     }
     .feature-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 24px;
-      max-width: 1200px;
-      margin: 80px auto;
-      padding: 0 24px;
+      padding: 80px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
     }
     .feature-card {
-      background: var(--bg-glass);
+      padding: 32px;
+      background: var(--bg-card);
       border: 1px solid var(--border-color);
-      padding: 40px;
       border-radius: 24px;
-      transition: all 0.3s;
+      transition: all 0.25s;
     }
     .feature-card:hover {
+      transform: translateY(-4px);
       border-color: var(--brand-primary);
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    }
-    .provider-strip {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 40px;
-      opacity: 0.4;
-      margin-top: 60px;
-      filter: grayscale(1);
-    }
-    .provider-strip svg { height: 24px; width: auto; }
-    
-    .section-title {
-      font-size: 2.5rem;
-      font-weight: 800;
-      margin-bottom: 60px;
-      text-align: center;
-    }
-    footer {
-      padding: 80px 24px;
-      border-top: 1px solid var(--border-color);
-      text-align: center;
-      background: var(--bg-deep);
     }
   </style>
 </head>
 <body>
-  <div class="hero-section">
-    <div class="hero-glow"></div>
-    <div class="hero-badge">16+ AI Providers. One Unified Experience.</div>
-    <h1 class="hero-title">Astrixa — The Ultimate<br>AI Platform</h1>
-    <p class="hero-subtitle">One Platform. Every AI Model. Unlimited Power. Built for power users who want full control over their AI experience.</p>
-    
-    <div class="flex gap-4" style="display:flex; gap:16px;">
-      <button class="btn-premium py-4 px-8 text-lg" onclick="location.href='astrixa.html'">Get Started →</button>
-      <button class="btn-secondary py-4 px-8 text-lg" onclick="window.open('https://github.com')">View on GitHub</button>
+  <nav class="landing-nav" id="main-nav">
+    <div class="flex items-center gap-2">
+      <div class="w-9 h-9 bg-brand-gradient rounded-lg flex items-center justify-center font-bold text-white shadow-brand">A</div>
+      <span class="font-black text-lg">Astrixa</span>
     </div>
-
-    <div class="provider-strip" id="provider-strip">
-      <!-- Populated by JS -->
+    <div class="flex items-center gap-6">
+      <a href="#features" class="text-sm font-medium text-secondary hover:text-primary">Features</a>
+      <button class="btn btn-primary btn-sm" onclick="location.href='astrixa.html'">Launch App</button>
     </div>
-  </div>
+  </nav>
 
-  <div class="max-w-6xl mx-auto py-24 px-6" style="max-width:1200px; margin:0 auto; padding:80px 24px;">
-    <h2 class="section-title">The Astrixa Ecosystem</h2>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="text-3xl mb-4">💬</div>
-        <h3 class="text-xl font-bold mb-2">Astrixa Chat</h3>
-        <p class="text-secondary text-sm">Premium chat interface with Astra, supporting markdown, syntax highlighting, and seamless conversations.</p>
+  <section class="hero">
+    <div class="hero-content">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-gradient-soft border border-brand-brand rounded-full text-xs font-bold text-brand mb-8">
+        <span class="w-2 h-2 bg-brand-primary rounded-full animate-pulse"></span>
+        16+ AI Providers Integrated
       </div>
-      <div class="feature-card">
-        <div class="text-3xl mb-4">🔌</div>
-        <h3 class="text-xl font-bold mb-2">Astrixa Connect</h3>
-        <p class="text-secondary text-sm">Connect to every major AI provider in one beautiful interface using your own API keys.</p>
-      </div>
-      <div class="feature-card">
-        <div class="text-3xl mb-4">🔒</div>
-        <h3 class="text-xl font-bold mb-2">Astrixa Vault</h3>
-        <p class="text-secondary text-sm">Privacy-first, developer-friendly, and completely local. Your keys, your data, your control.</p>
+      <h1 class="hero-title">The Ultimate AI Platform for Power Users</h1>
+      <p class="hero-subtitle">Connect to every major AI provider in one beautiful, private interface. Your keys, your data, your control.</p>
+      <div class="flex gap-4 justify-center">
+        <button class="btn btn-primary btn-lg" onclick="location.href='astrixa.html'">Get Started Free →</button>
+        <button class="btn btn-secondary btn-lg" onclick="window.open('get-api.html')">Setup Guide</button>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="max-w-4xl mx-auto py-24 px-6 text-center" style="max-width:800px; margin:0 auto; padding:80px 24px; text-align:center;">
-    <h2 class="text-4xl font-black mb-8" style="font-size:3rem; font-weight:900; margin-bottom:32px;">Enter the Future of AI</h2>
-    <button class="btn-premium py-5 px-12 text-xl" onclick="location.href='astrixa.html'" style="padding:20px 48px; font-size:1.25rem;">Launch Astrixa Chat</button>
-  </div>
+  <section id="features" class="feature-grid">
+    <div class="feature-card">
+      <div class="text-3xl mb-4">💬</div>
+      <h3 class="text-lg font-bold mb-2">Astrixa Chat</h3>
+      <p class="text-sm text-secondary">A polished ChatGPT-style interface with Astra, supporting markdown, syntax highlighting, and streaming responses.</p>
+    </div>
+    <div class="feature-card">
+      <div class="text-3xl mb-4">🔌</div>
+      <h3 class="text-lg font-bold mb-2">Astrixa Connect</h3>
+      <p class="text-sm text-secondary">Directly connect to OpenAI, Claude, Gemini, DeepSeek, and 12+ more using your own API keys.</p>
+    </div>
+    <div class="feature-card">
+      <div class="text-3xl mb-4">🔍</div>
+      <h3 class="text-lg font-bold mb-2">Search Addon</h3>
+      <p class="text-sm text-secondary">Enable real-time web search with SerpAPI to give Astra the power of live information.</p>
+    </div>
+  </section>
 
-  <footer>
-    <div class="logo-container justify-center mb-6" style="display:flex; justify-content:center; align-items:center; gap:12px; margin-bottom:24px;">
-      <div class="logo-icon">A</div>
-      <span style="font-size:1.5rem; font-weight:800;">Astrixa</span>
-    </div>
-    <p class="text-secondary text-sm mb-8">© 2026 AstrixaWorld. All rights reserved. Built for the AI community.</p>
-    <div class="flex justify-center gap-8 text-xs font-bold text-tertiary" style="display:flex; justify-content:center; gap:32px; font-size:0.75rem;">
-      <a href="#">Platform</a>
-      <a href="#">Ecosystem</a>
-      <a href="#">Resources</a>
-      <a href="#">FAQ</a>
-    </div>
+  <footer class="py-12 text-center border-t border-white/5">
+    <p class="text-xs text-secondary">© 2026 AstrixaWorld. Privacy First. Local Storage Only.</p>
   </footer>
 
-  <script src="assets/js/providers.js"></script>
   <script>
-    const strip = document.getElementById('provider-strip');
-    const providers = Object.values(window.PROVIDERS).slice(0, 8);
-    strip.innerHTML = providers.map(p => `
-      <div style="color:white; width:30px; height:30px;">${p.icon}</div>
-    `).join('');
+    window.addEventListener('scroll', () => {
+      document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 20);
+    });
   </script>
 </body>
 </html>
